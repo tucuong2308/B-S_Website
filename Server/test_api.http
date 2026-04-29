@@ -1,0 +1,181 @@
+### Bất Động Sản API - HTTP Test File
+### Base URL: http://localhost:8000
+
+---
+
+### ✅ HEALTH CHECKS
+
+### 1. Root Endpoint
+GET http://localhost:8000/
+
+---
+
+### 2. Health Check
+GET http://localhost:8000/health
+
+---
+
+### 🌍 PROVINCES
+
+### 1. Get All Provinces
+GET http://localhost:8000/api/v1/provinces/
+
+---
+
+### 2. Get Districts by Province ID
+GET http://localhost:8000/api/v1/provinces/01/districts
+
+---
+
+### 3. Get Districts by Province Name (Hà Nội)
+GET http://localhost:8000/api/v1/districts?province_name=Hà%20Nội
+
+---
+
+### 4. Get Average Price by Province
+GET http://localhost:8000/api/v1/provinces/avg-price-per-m2?province_name=Hà%20Nội
+
+---
+
+### 4b. Get Average Price by Province with Type Filter
+GET http://localhost:8000/api/v1/provinces/avg-price-per-m2?province_name=Hà%20Nội&type_id=nha-o
+
+---
+
+### 🏘️ DISTRICTS
+
+### 5. Get Wards by District ID
+GET http://localhost:8000/api/v1/wards/001
+
+---
+
+### 6. Get Wards by District Name (Quận Ba Đình)
+GET http://localhost:8000/api/v1/wards?district_name=Ba%20Đình
+
+---
+
+### 7. Get Average Price by District
+GET http://localhost:8000/api/v1/districts/avg-price-per-m2?district_name=Ba%20Đình
+
+---
+
+### 7b. Get Average Price by District with Type Filter
+GET http://localhost:8000/api/v1/districts/avg-price-per-m2?district_name=Quận%20Ba%20Đình&type_id=nha-o
+
+---
+
+### 🏠 WARDS
+
+### 8. Get Average Price by Ward
+GET http://localhost:8000/api/v1/wards/avg-price-per-m2?ward_name=Phường%20Phúc%20Xá
+
+---
+
+### 8b. Get Average Price by Ward with Type Filter
+GET http://localhost:8000/api/v1/wards/avg-price-per-m2?ward_name=Phường%20Phúc%20Xá&type_id=nha-o
+
+---
+
+### 📊 ANALYTICS
+
+### 9. Get Price Analysis by Address (Nominatim)
+POST http://localhost:8000/api/v1/price/by-address
+Content-Type: application/json
+
+< payload.json
+
+###
+
+### 10. Get Price Analysis by Address (with Mapbox Fallback)
+POST http://localhost:8000/api/v1/price/by-address
+Content-Type: application/json
+
+< payload.json
+
+###
+
+### 11. Get Projects by District
+GET http://localhost:8000/api/v1/projects/district?district_name=Ba%20Đình
+
+---
+
+### 12. Get Projects by Ward
+GET http://localhost:8000/api/v1/projects/ward?ward_name=phúc%20Xá
+
+---
+
+### 📈 PRICE BY DISTRICT NAME - NEW ENDPOINT
+
+### 13. Get Monthly Average Price by District Name (12 months)
+GET http://localhost:8000/api/v1/price/by-district-name?district_name=Ba%20Đình
+
+---
+
+### 13b. Get Monthly Average Price by District with Type Filter
+GET http://localhost:8000/api/v1/price/by-district-name?district_name=Quận%20Ba%20Đình&type_id=nha-o
+
+---
+
+### 13c. Get Monthly Average Price - Invalid District (should return 404)
+GET http://localhost:8000/api/v1/price/by-district-name?district_name=Huyện_Không_Tồn_Tại
+
+---
+
+### 13d. Get Monthly Average Price - Another Valid District
+GET http://localhost:8000/api/v1/price/by-district-name?district_name=Quận%201
+
+---
+
+### 📊 PRICE BY PROVINCE NAME - NEW ENDPOINT
+
+### 14. Get Monthly Average Price by Province Name (12 months)
+GET http://localhost:8000/api/v1/price/by-province-name?province_name=Hà%20Nội
+
+---
+
+### 14b. Get Monthly Average Price by Province with Type Filter
+GET http://localhost:8000/api/v1/price/by-province-name?province_name=Hà%20Nội&type_id=nha-o
+
+---
+
+### 14c. Get Monthly Average Price - Invalid Province (should return 404)
+GET http://localhost:8000/api/v1/price/by-province-name?province_name=Tỉnh_Không_Tồn_Tại
+
+---
+
+### 14d. Get Monthly Average Price - Another Valid Province
+GET http://localhost:8000/api/v1/price/by-province-name?province_name=Hồ%20Chí%20Minh
+
+---
+
+### 🏘️ LISTINGS (Danh sách nhà)
+
+### 15. Get Listings by District Name
+GET http://localhost:8000/api/v1/listings/by-district?district_name=Quận%201
+
+---
+
+### 15b. Get Listings by District with Type Filter
+GET http://localhost:8000/api/v1/listings/by-district?district_name=Quận%20Ba%20Đình&type_id=nha-o
+
+---
+
+### 15c. Get Listings by District with Limit
+GET http://localhost:8000/api/v1/listings/by-district?district_name=Quận%201&limit=50
+
+---
+
+### 16. Get Listings by Ward Name
+GET http://localhost:8000/api/v1/listings/by-ward?ward_name=Phúc%20Xá
+
+---
+
+### 16b. Get Listings by Ward with Type Filter
+GET http://localhost:8000/api/v1/listings/by-ward?ward_name=Phường%20Phúc%20Xá&type_id=nha-o
+
+---
+
+### 16c. Get Listings by Ward with Limit
+GET http://localhost:8000/api/v1/listings/by-ward?ward_name=Phường%20Phúc%20Xá&limit=50
+
+---
