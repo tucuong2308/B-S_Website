@@ -63,6 +63,11 @@ export const API_ENDPOINTS = {
     LOGOUT: '/auth/logout',
     REFRESH: '/auth/refresh',
   },
+
+  // Chat Agent
+  CHAT: {
+    MESSAGE: '/api/v1/chat/message',
+  },
 } as const;
 
 // Helper function để lấy full URL

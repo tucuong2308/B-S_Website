@@ -5,7 +5,7 @@ import {
   Search, Bell, Settings, Building2, ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { chatWithAI } from '../services/gemini';
+import { chatWithAgent } from '../services/chat';
 import { ChatMessage } from '../types';
 
 export default function ChatPage() {
@@ -44,12 +44,7 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      const history = messages.map(m => ({
-        role: m.role === 'user' ? 'user' : 'model',
-        parts: [{ text: m.content }]
-      }));
-      
-      const aiResponse = await chatWithAI(input, history);
+      const aiResponse = await chatWithAgent(input, messages);
       
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),

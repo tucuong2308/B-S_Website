@@ -13,7 +13,8 @@ class Settings(BaseSettings):
     DB_PORT: str = "5432"
     DB_NAME: str = "batdongsan_db"
 
-    MAPBOX_TOKEN="pk.xxxxx"
+    DEEPSEEK_API_KEY: str = ""
+    MAPBOX_TOKEN: str = ""
     
     # CORS Configuration
     CORS_ORIGINS: list = [

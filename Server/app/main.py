@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.routers import provinces, districts, wards, analytics
+from app.routers import provinces, districts, wards, analytics, chat_agent
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -39,6 +39,11 @@ app.include_router(
     analytics.router,
     prefix=f"{settings.API_PREFIX}",
     tags=["Analytics - Phân tích giá & Dự án"]
+)
+app.include_router(
+    chat_agent.router,
+    prefix=f"{settings.API_PREFIX}",
+    tags=["Chat Agent - Tư vấn AI"]
 )
 
 

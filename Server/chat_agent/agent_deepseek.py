@@ -2,7 +2,7 @@
 # =========================
 # 1. IMPORT
 # =========================
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
 from langchain_core.messages import SystemMessage
 from langgraph.prebuilt import create_react_agent
@@ -36,13 +36,6 @@ from app.services.listings import (
 # 3. HELPER FUNCTION
 # =========================
 def get_db_session():
-    """
-    Tạo database session mới.
-
-    Lưu ý:
-    - Mỗi tool phải tự mở và đóng session
-    - Tránh leak connection
-    """
     return SessionLocal()
 
 
@@ -66,9 +59,6 @@ def get_avg_price_by_ward(ward_name: str) -> str:
         Chuỗi mô tả gồm:
         - Giá trung bình (đ/m²)
         - Tổng số căn nhà trong dữ liệu
-
-    Ví dụ:
-        "Giá trung bình tại Phường Phúc Xá: 45,000,000 đ/m² (120 căn)"
     """
     try:
         db = get_db_session()
@@ -99,9 +89,6 @@ def get_avg_price_by_district(district_name: str) -> str:
         Chuỗi gồm:
         - Giá trung bình (đ/m²)
         - Tổng số căn
-
-    Ví dụ:
-        "Giá trung bình tại Quận Ba Đình: 120,000,000 đ/m² (350 căn)"
     """
     try:
         db = get_db_session()
@@ -132,9 +119,6 @@ def get_avg_price_by_province(province_name: str) -> str:
         Chuỗi gồm:
         - Giá trung bình
         - Tổng số căn
-
-    Ví dụ:
-        "Giá trung bình tại Hà Nội: 80,000,000 đ/m² (5000 căn)"
     """
     try:
         db = get_db_session()
@@ -162,9 +146,7 @@ def get_monthly_price_by_district(district_name: str) -> str:
         district_name: Tên quận/huyện
 
     Returns:
-         danh sách giá trong 12 tháng
-
-   
+        Giá tháng gần nhất và xu hướng tăng/giảm
     """
     try:
         db = get_db_session()
@@ -178,7 +160,6 @@ def get_monthly_price_by_district(district_name: str) -> str:
 
         latest = monthly_prices[-1]
         price = latest["avg_price_per_m2"]
-
         trend = "↑" if len(monthly_prices) > 1 and price > monthly_prices[-2]["avg_price_per_m2"] else "↓"
 
         return f"Giá {district_name}: {price:,.0f} đ/m² {trend}"
@@ -196,7 +177,7 @@ def get_monthly_price_by_province(province_name: str) -> str:
         province_name: Tên tỉnh/thành phố
 
     Returns:
-        danh sách giá trong 12 tháng
+        Giá tháng gần nhất và xu hướng tăng/giảm
     """
     try:
         db = get_db_session()
@@ -210,7 +191,6 @@ def get_monthly_price_by_province(province_name: str) -> str:
 
         latest = monthly_prices[-1]
         price = latest["avg_price_per_m2"]
-
         trend = "↑" if len(monthly_prices) > 1 and price > monthly_prices[-2]["avg_price_per_m2"] else "↓"
 
         return f"Giá {province_name}: {price:,.0f} đ/m² {trend}"
@@ -229,10 +209,10 @@ def get_listings_by_district(district_name: str) -> str:
     - Tham khảo giá thực tế
 
     Args:
-        district_name: Tên quận/huyện (lưu ý khi chuyền vào hàm chỉ chuyền tên không ghi huyện ở trước)
+        district_name: Tên quận/huyện (chỉ truyền tên, không kèm "quận/huyện")
 
     Returns:
-        Danh sách căn nhà trong 1 huyện và thông tin tương ứ
+        Danh sách 5 căn nhà gần nhất với giá và diện tích
     """
     try:
         db = get_db_session()
@@ -242,12 +222,12 @@ def get_listings_by_district(district_name: str) -> str:
         if not listings:
             return f"Không có nhà nào ở {district_name}"
 
-        result = f"🏠 {district_name}:\n"
+        result = f"Nhà tại {district_name}:\n"
         for i, item in enumerate(listings, 1):
             result += (
-                f"{i}. {item.get('price',0):,.0f}đ | "
-                f"{item.get('area',0)}m² | "
-                f"{item.get('price_per_m2',0):,.0f} đ/m²\n"
+                f"{i}. {item.get('price', 0):,.0f}đ | "
+                f"{item.get('area', 0)}m² | "
+                f"{item.get('price_per_m2', 0):,.0f} đ/m²\n"
             )
 
         return result
@@ -262,10 +242,10 @@ def get_listings_by_ward(ward_name: str) -> str:
     Lấy danh sách nhà theo phường.
 
     Args:
-        ward_name: Tên phường (lưu ý khi chuyền vào hàm chỉ chuyền tên không ghi phường ở trước)
+        ward_name: Tên phường (chỉ truyền tên, không kèm "phường/xã")
 
     Returns:
-        Danh sách căn nhà trong phường
+        Danh sách 5 căn nhà gần nhất với giá và diện tích
     """
     try:
         db = get_db_session()
@@ -275,12 +255,12 @@ def get_listings_by_ward(ward_name: str) -> str:
         if not listings:
             return f"Không có nhà nào ở {ward_name}"
 
-        result = f"🏠 {ward_name}:\n"
+        result = f"Nhà tại {ward_name}:\n"
         for i, item in enumerate(listings, 1):
             result += (
-                f"{i}. {item.get('price',0):,.0f}đ | "
-                f"{item.get('area',0)}m² | "
-                f"{item.get('price_per_m2',0):,.0f} đ/m²\n"
+                f"{i}. {item.get('price', 0):,.0f}đ | "
+                f"{item.get('area', 0)}m² | "
+                f"{item.get('price_per_m2', 0):,.0f} đ/m²\n"
             )
 
         return result
@@ -304,12 +284,13 @@ tools = [
 
 
 # =========================
-# 6. LLM
+# 6. LLM (DeepSeek)
 # =========================
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
+llm = ChatOpenAI(
+    model="deepseek-chat",
+    base_url="https://api.deepseek.com",
+    api_key=settings.DEEPSEEK_API_KEY or os.getenv("DEEPSEEK_API_KEY", ""),
     temperature=0.3,
-    google_api_key=settings.GEMINI_API_KEY or os.getenv("GOOGLE_API_KEY", ""),
 )
 
 
@@ -334,7 +315,7 @@ Nguyên tắc:
 agent = create_react_agent(
     model=llm,
     tools=tools,
-    state_modifier=SystemMessage(content=SYSTEM_PROMPT),
+    prompt=SystemMessage(content=SYSTEM_PROMPT),
 )
 
 
@@ -360,5 +341,3 @@ def run_query(query: str):
 # =========================
 if __name__ == "__main__":
     run_query("nên mua nhà ở đâu trong hà đông hay cầu giấy")
-
-

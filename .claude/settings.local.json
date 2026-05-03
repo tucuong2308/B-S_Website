@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(conda run *)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 \"C:\\\\Users\\\\LENOVO\\\\miniconda3\\\\envs\\\\manhaw\\\\python.exe\" test_agent.py)",
+      "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 \"C:\\\\Users\\\\LENOVO\\\\miniconda3\\\\envs\\\\manhaw\\\\python.exe\" -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload)",
+      "Bash(curl -s http://localhost:8000/health)",
+      "Bash(curl *)"
+    ]
+  }
+}

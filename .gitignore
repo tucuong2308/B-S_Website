@@ -1,0 +1,20 @@
+# Environment files - NEVER commit these
+.env
+.env.local
+.env.*.local
+Server/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Node / Client
+node_modules/
+dist/
+build/
+coverage/
