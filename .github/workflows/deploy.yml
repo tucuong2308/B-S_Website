@@ -22,4 +22,5 @@ jobs:
             cd B-S_Website
             git pull origin main
             echo "DEEPSEEK_API_KEY=${{ secrets.DEEPSEEK_API_KEY }}" > .env
-            docker compose up -d --build server
+            docker-compose down
+            docker-compose up -d --build
