@@ -2,13 +2,12 @@ name: Simple Deploy
 
 on:
 push:
-branches: [ "main" ]
+branches: ["main"]
 
 jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
 steps:
   - name: Deploy to EC2
     uses: appleboy/ssh-action@v1.0.3
@@ -17,8 +16,7 @@ steps:
       username: ${{ secrets.EC2_USER }}
       key: ${{ secrets.EC2_SSH_KEY }}
       script: |
-        cd B-S_Website
+        cd <repo>
         git pull origin main
         docker compose down
         docker compose up -d --build
-```
