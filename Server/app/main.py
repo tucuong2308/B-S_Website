@@ -59,3 +59,8 @@ def root():
 @app.get("/health", tags=["Health"])
 def health_check():
     return {"status": "ok"}
+
+
+@app.get("/debug/cors", tags=["Debug"])
+def debug_cors():
+    return {"cors_origins": settings.CORS_ORIGINS}

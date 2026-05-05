@@ -87,6 +87,50 @@ export interface ChatMessage {
   role: 'user' | 'bot';
   content: string;
   timestamp: Date;
+  widgets?: ChatWidget[];
+}
+
+// ── Chat Widget types ──────────────────────────────────────
+
+export type ChatWidget =
+  | PriceChartWidget
+  | ComparisonWidget
+  | MiniMapWidget;
+
+export interface PriceChartWidget {
+  type: 'price_chart';
+  area_name: string;
+  monthly_prices: Array<{
+    month: string;
+    avg_price_per_m2: number;
+  }>;
+}
+
+export interface ComparisonItem {
+  name: string;
+  avg_price_per_m2: number;
+  total_listings: number;
+}
+
+export interface ComparisonWidget {
+  type: 'comparison';
+  areas: ComparisonItem[];
+}
+
+export interface MapMarkerData {
+  lat: number;
+  lon: number;
+  label: string;
+  price: number;
+  area: number;
+}
+
+export interface MiniMapWidget {
+  type: 'mini_map';
+  area_name: string;
+  center_lat: number;
+  center_lon: number;
+  markers: MapMarkerData[];
 }
 
 export interface MonthlyAveragePriceData {

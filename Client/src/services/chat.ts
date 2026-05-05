@@ -1,10 +1,15 @@
 import { BACKEND_CONFIG } from '../config/backend.config';
 import { API_ENDPOINTS } from '../config/endpoints';
-import { ChatMessage } from '../types';
+import { ChatMessage, ChatWidget } from '../types';
 
 interface ChatHistoryItem {
   role: 'user' | 'assistant';
   content: string;
+}
+
+interface ChatAgentResponse {
+  response: string;
+  widgets?: ChatWidget[];
 }
 
 const buildUrl = (path: string): string => {
@@ -15,7 +20,7 @@ const buildUrl = (path: string): string => {
 export const chatWithAgent = async (
   message: string,
   history: ChatMessage[] = []
-): Promise<string> => {
+): Promise<ChatAgentResponse> => {
   const url = buildUrl(API_ENDPOINTS.CHAT.MESSAGE);
 
   const historyPayload: ChatHistoryItem[] = history.map((m) => ({
@@ -38,5 +43,8 @@ export const chatWithAgent = async (
   }
 
   const data = await response.json();
-  return data.response as string;
+  return {
+    response: data.response as string,
+    widgets: data.widgets as ChatWidget[] | undefined,
+  };
 };

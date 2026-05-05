@@ -7,6 +7,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { chatWithAgent } from '../services/chat';
 import { ChatMessage } from '../types';
+import { renderWidget } from '../components/ChatWidgets';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -44,12 +45,13 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      const aiResponse = await chatWithAgent(input, messages);
-      
+      const result = await chatWithAgent(input, messages);
+
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'bot',
-        content: aiResponse,
+        content: result.response,
+        widgets: result.widgets,
         timestamp: new Date()
       };
       
@@ -196,11 +198,18 @@ export default function ChatPage() {
                       {msg.role === 'bot' ? 'Bot Tư vấn' : 'Bạn'}
                     </span>
                     <div className={`p-4 rounded-2xl shadow-sm border ${
-                      msg.role === 'bot' 
-                        ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-tl-none text-slate-800 dark:text-slate-200' 
+                      msg.role === 'bot'
+                        ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-tl-none text-slate-800 dark:text-slate-200'
                         : 'bg-primary border-primary rounded-tr-none text-white'
                     }`}>
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                      {msg.widgets && msg.widgets.length > 0 && (
+                        <div className="mt-2 space-y-3">
+                          {msg.widgets.map((w, i) => (
+                            <div key={i}>{renderWidget(w)}</div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 

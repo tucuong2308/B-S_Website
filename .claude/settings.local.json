@@ -6,7 +6,20 @@
       "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 \"C:\\\\Users\\\\LENOVO\\\\miniconda3\\\\envs\\\\manhaw\\\\python.exe\" test_agent.py)",
       "Bash(PYTHONIOENCODING=utf-8 PYTHONUTF8=1 \"C:\\\\Users\\\\LENOVO\\\\miniconda3\\\\envs\\\\manhaw\\\\python.exe\" -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload)",
       "Bash(curl -s http://localhost:8000/health)",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(npx tsc *)",
+      "Bash(python -m py_compile app/routers/chat_agent.py)",
+      "Bash(python -m py_compile app/schemas/chat.py)",
+      "Bash(npx vite *)",
+      "Bash(start *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /F /PID 4232)",
+      "Bash(taskkill /F /PID 27896)",
+      "PowerShell(Get-Process *)",
+      "Bash(cmd *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(npx kill-port *)",
+      "PowerShell(conda run *)"
     ]
   }
 }
